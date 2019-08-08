@@ -1,0 +1,22 @@
+.label_messageCount {
+  text-align: center;
+}
+
+.input_message {
+  width: 85%;
+}
+
+.button_messageSubmit {
+  float: right;
+  width: 100px;
+  height: 45px;
+  top: 20px;
+}
+
+.container_message {
+  align-items: center;
+  max-height: 100px;
+  margin-top: 5px;
+  padding: 10px;
+  padding-top: 0px;
+}
