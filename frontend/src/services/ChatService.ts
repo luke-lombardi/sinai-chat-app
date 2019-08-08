@@ -6,6 +6,7 @@ const URI = `ws://${HOST}:${PORT}/${ENDPOINT}`;
 export interface Message {
   email: string;
   message: string;
+  timestamp: number;
 }
 
 interface Params {
@@ -45,15 +46,16 @@ export default class ChatService {
     this.params.receiveCallback(event);
   }
 
-  public async sendMessage(msg: string) {
+  public async sendMessage(email: string, msg: string) {
     if(!this.connected) {
       console.log('Not connected to server.');
       return;
     }
 
     let message: Message = {
-      'email': 'placeholder@aol.com',
-      'message': msg
+      'email': email,
+      'message': msg,
+      'timestamp': 0,
     };
 
     this.ws.send(JSON.stringify(message));

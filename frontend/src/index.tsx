@@ -10,7 +10,7 @@ import { createStore, applyMiddleware } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 
 // Sagas
-import { watchEmail } from './sagas/saga';
+import { watchEmail, watchMessage } from './sagas/saga';
 
 // Components
 import App from './App';
@@ -19,6 +19,7 @@ import App from './App';
 const sagaMiddleware  = createSagaMiddleware();
 const store = createStore(reducer, applyMiddleware(sagaMiddleware));
 sagaMiddleware.run(watchEmail);
+sagaMiddleware.run(watchMessage);
 
 ReactDOM.render(<Provider store={store}> <App/> </Provider>, document.getElementById('root'));
 serviceWorker.unregister();

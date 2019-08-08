@@ -14,12 +14,13 @@ import ChatService, { Message } from '../services/ChatService';
 
 interface IProps {
   email: string;
+  messageCount: number;
+  onMessage?: any;
 };
 
 interface IState {
   messages: Array<Message>;
   message: string;
-  messageCount: number;
 };
 
 class ChatWindow extends Component<IProps, IState> {
@@ -30,7 +31,6 @@ class ChatWindow extends Component<IProps, IState> {
     this.state = {
       messages: [],
       message: '',
-      messageCount: 0,
     };
 
     this.handleMessage = this.handleMessage.bind(this);
@@ -49,14 +49,13 @@ class ChatWindow extends Component<IProps, IState> {
 
   async handleMessage(event: any) {
     let msg: Message = JSON.parse(event.data);
-
-    let newMessageCount: number = this.state.messageCount + 1;
-    await this.setState({ messageCount: newMessageCount })
     
     await this.setState({ 
       messages: this.state.messages.concat([ msg ]),
       message: '',
     });
+
+    await this.props.onMessage();
   }
 
   async sendMessage() {
@@ -64,7 +63,7 @@ class ChatWindow extends Component<IProps, IState> {
       return;
     }
 
-    await this.chatService.sendMessage(this.state.message);
+    await this.chatService.sendMessage(this.props.email, this.state.message);
   }
   
   render() {
@@ -73,17 +72,17 @@ class ChatWindow extends Component<IProps, IState> {
       <Container>
 
         <Typography className='label_messageCount'>
-          Message Count: <b> {this.state.messageCount} </b>
+          User: <b> {this.props.email} </b> <br />
+          Message Count: <b> {this.props.messageCount} </b>
         </Typography>
 
         { /* Chat message list */}
         <Paper style={{ maxHeight: 400, minHeight: 400, overflow: 'auto', marginTop: '5%' } }>
           <List >
             {this.state.messages.map(msg => {
-                const labelId = `checkbox-list-secondary-label-${msg.message}`;
-                // const isUser = 
+                // TODO: distinguish between receiver and sender & format accordingly
                 return (
-                  <ListItem key={msg.message} style={ { textAlign: 'left' }  }>
+                  <ListItem key={msg.timestamp} style={ { textAlign: 'left' }  }>
                     <ListItemText primary={`${msg.email} - ${msg.message}`} />
                   </ListItem>
                 );
@@ -103,7 +102,7 @@ class ChatWindow extends Component<IProps, IState> {
               variant="outlined"
               onKeyPress={ (event) => {
                 if (event.key === 'Enter') {
-                  this.sendMessage()
+                  this.sendMessage();
                 }
               }}
             />
@@ -123,13 +122,15 @@ class ChatWindow extends Component<IProps, IState> {
 // @ts-ignore
 const mapStateToProps = state => {
   return {
-    email: state.email
+    email: state.email,
+    messageCount: state.messageCount
   };
 };
 
 // @ts-ignore
 const mapDispatchToProps = dispatch => {
   return {
+    onMessage: () => dispatch({ type: 'GOT_MESSAGE', value: 1 }),
   };
 };
 

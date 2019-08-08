@@ -1,3 +1,5 @@
+*** Note: I did not implement any connection state handling logic, so the websocket server must be already running when you load the app. 
+
 ----
 ## websocket server setup (run this first)
 1. cd `./server`:

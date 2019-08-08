@@ -13,6 +13,9 @@ const reducer = (state = initialState, action: any) => {
     case 'EMAIL_CHANGED_ASYNC':
       newState.email = action.value;
       break;
+    case 'GOT_MESSAGE_ASYNC':
+      newState.messageCount += 1;
+      break;
   }
   return newState;
 };

@@ -29,7 +29,7 @@ class App extends Component<IProps, IState> {
       <Container component='main' maxWidth='md' style={ { alignItems: 'center'} }>
         {
           // If email was never set, render the JoinChat component
-          this.props.email !== '' ?
+          this.props.email === '' ?
             <JoinChat />
           :
           // Otherwise, render the chat window

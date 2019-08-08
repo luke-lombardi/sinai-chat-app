@@ -2,14 +2,17 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 // UI components
-import { Button, Paper, Box, Container, Typography, CssBaseline } from '@material-ui/core';
-import { FormControl, InputLabel, Input, FormHelperText, TextField } from '@material-ui/core';
+import { Button, Container, Typography, CssBaseline, TextField } from '@material-ui/core';
+
+// Styles
+import '../styles/JoinChat.css';
 
 interface IProps {
   onEmailSubmit?: any;
 };
 
 interface IState {
+  email: string;
 };
 
 class JoinChat extends Component<IProps, IState> {
@@ -17,7 +20,23 @@ class JoinChat extends Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state =  {
+      email: ''
     };
+
+    this.setEmail = this.setEmail.bind(this);
+    this.submitEmail = this.submitEmail.bind(this);
+  }
+
+  async setEmail(event: any) {
+    await this.setState({email: event.target.value});
+  }
+
+  async submitEmail() {
+    if(this.state.email === '') {
+      return;
+    }
+  
+    this.props.onEmailSubmit(this.state.email);
   }
 
   render() {
@@ -29,7 +48,6 @@ class JoinChat extends Component<IProps, IState> {
         <Typography component='h1' variant='h5'>
           Join chat
         </Typography>
-        <form noValidate>
           <TextField
             variant='outlined'
             margin='normal'
@@ -40,18 +58,23 @@ class JoinChat extends Component<IProps, IState> {
             name='email'
             autoComplete='email'
             autoFocus
+            value={this.state.email}
+            onChange={ (event) => { this.setEmail(event); }}
+            onKeyPress={ (event) => {
+              if (event.key === 'Enter') {
+                this.submitEmail();
+              }
+            }}
           />
           <Button
-            onClick={() => { this.props.onEmailSubmit('some shit');  } }
+            onClick={ () => { this.submitEmail();  } }
             fullWidth
             variant='contained'
             color='primary'
-            // className={classes.submit}
+            className='button_emailSubmit'
           >
             Join chat
           </Button>
-
-        </form>
       </div>
     </Container>
     );
